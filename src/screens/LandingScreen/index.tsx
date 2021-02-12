@@ -1,21 +1,68 @@
-import React,{useState} from  'react';
-import {View, Text, TextInput, StyleSheet, Image, TouchableOpacity, ActivityIndicator} from 'react-native';
+import React,{useState, useEffect} from  'react';
+import {
+    View,
+    TextInput, 
+    StyleSheet, 
+    Image, 
+    TouchableOpacity, 
+    ActivityIndicator,
+    Alert,
+    ScrollView
+} from 'react-native';
 
+import PerfilCard from '../../components/PerfilCard';
+import ClearButton from '../../components/ClearHistorySearch';
+import api from '../../services/api';
 
 export default function  LandingScreen(){
-    const [lastSearch,setLastSearch] = useState([]);
-    const [isLoading,setIsLoading] = useState(true)
-    
-    const IsWithLastSearch = ()=>{
-        if(lastSearch.length === 0){
+    const [lastsSearch,setLastsSearch]:any = useState([0]);
+    const [input,setInput] = useState("");
+    const [isLoading,setIsLoading] = useState(false);
+
+    const ClearHistory = ()=>{
+        setLastsSearch([]);
+    }
+
+    const Data = ()=>{
+        if(isLoading){ return <ActivityIndicator size="large" color="#FF7A00" /> }
+        
+        if(lastsSearch.length !== 0){
             return(
-                <>
-                    <Image source={require('../../../assets/welcome.png')}/>
-                </>
+                
+                <ScrollView style={styles.viewList}>
+                    <ClearButton clear = { ClearHistory }/>
+                    <PerfilCard name="Homem Aranha" login="DevzãoBoladão" image={require('../../../assets/locationIcon.png')} location="Telhado velho"/>  
+                </ScrollView>
             )
         }
-        else{ return<ActivityIndicator size="large" color="#FF7A00" /> }
+        else{ return <Image source={require('../../../assets/welcome.png')}/> }
+
     }
+
+    async function SearchPerfil(){
+        setIsLoading(true);
+        if(input!== ""){
+            try {
+                const response = await api.get(`/${input}`);
+                if(response){
+                    setIsLoading(false);
+                    Alert.alert("Encontrei esse Perfil",`Nome:  ${response.data.name}`)
+                }
+            }
+            catch (error) {
+                Alert.alert("Nenhum perfil encontrado",`Não existe um perfil com o nome ${input}`);
+                setIsLoading(false);
+            }
+        }
+        else{
+            Alert.alert("Desculpe :(","Digite um nome antes de pesquisar algum perfil...");
+            setIsLoading(false);
+        }
+    }
+
+    useEffect(()=>{
+        Data();
+    },[lastsSearch])
 
     return(
         <View style={styles.container}>
@@ -26,14 +73,17 @@ export default function  LandingScreen(){
                         style={styles.input}
                         placeholder="Login de usuário"
                         placeholderTextColor="white"
+                        onChangeText={(text)=>{setInput(text)}}
                     />
-                    <TouchableOpacity>
+                    <TouchableOpacity
+                        onPress={()=>{SearchPerfil()}}
+                    >
                         <Image source={require('../../../assets/searchicon.png')} style={styles.searchIcon}/>  
                     </TouchableOpacity>
                 </View>
             </View>
             <View style={styles.mainView}>
-                <IsWithLastSearch/>
+                <Data/>
             </View>
 
         </View>
@@ -66,7 +116,7 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         textAlign: 'center',
         fontSize: 16,
-        marginHorizontal:5
+        marginHorizontal:10
     },
     viewInput:{
         flexDirection: 'row',
@@ -91,4 +141,7 @@ const styles = StyleSheet.create({
         justifyContent:'center',
         alignItems:'center',
     },
+    viewList:{
+        width:'100%',
+    }
 })
