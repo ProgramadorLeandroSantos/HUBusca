@@ -1,10 +1,11 @@
 import React from  'react';
-import {View, Text, StyleSheet} from 'react-native';
+import {View, Text, StyleSheet, Alert} from 'react-native';
 
-export default function PerfilScreen(){
+export default function PerfilScreen({route}:any){
+    const { name,login,image,location,reposURL,quantRepos,followers,id } = route.params;
     return(
         <View style={styles.container}>
-            <Text style={styles.text}>PerfilScreen</Text>
+            <Text>{name}</Text>
         </View>
     )
 }
@@ -16,7 +17,5 @@ const styles = StyleSheet.create({
         justifyContent:'center',
         alignItems: 'center'
     },
-    text:{
-        color: 'black'
-    }
+
 })

@@ -1,28 +1,19 @@
 import React from 'react';
-import { createAppContainer } from 'react-navigation';
-import createAnimatedSwitchNavigator from 'react-navigation-animated-switch';
-import { Transition } from 'react-native-reanimated';
+import { createStackNavigator } from '@react-navigation/stack';
 
 import LandingScreen from '../screens/LandingScreen';
 import PerfilScreen from '../screens/PerfilScreen';
 
-const MainStack = createAnimatedSwitchNavigator(
-  {
-    LandingScreen,
-    PerfilScreen,
-  },
-  {
-    transition: (
-      <Transition.Together>
-        <Transition.Out
-          type="slide-bottom"
-          durationMs={400}
-          interpolation="easeIn"
-        />
-        <Transition.In type="fade" durationMs={500} />
-      </Transition.Together>
-    ),
-  },
-);
+const Stack = createStackNavigator();
 
-export default createAppContainer(MainStack);
+export default () => (
+   <Stack.Navigator
+        initialRouteName="MainScreen"
+        screenOptions={{
+            headerShown: false,
+        }}
+    >
+        <Stack.Screen name="LandingScreen" component={ LandingScreen }/>
+        <Stack.Screen name="PerfilScreen" component={ PerfilScreen }/>
+    </Stack.Navigator>
+);

@@ -14,7 +14,6 @@ import {
 import PerfilCard from '../../components/PerfilCard';
 import ClearButton from '../../components/ClearHistorySearch';
 import api from '../../services/api/api';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function  LandingScreen(){
     const [lastsSearch,setLastsSearch]:any = useState([]);
@@ -44,13 +43,17 @@ export default function  LandingScreen(){
                             login={perfil.login} 
                             image={perfil.image} 
                             location={perfil.location}
+                            reposURL={perfil.reposURL}
+                            quantRepos={perfil.quantRepos}
+                            followers={perfil.followers}
+                            id={perfil.id}
                         />  
                     )
                 } )} 
                 </ScrollView>
             )
         }
-        else{ return <Image source={require('../../../assets/welcome.png')}/> }
+        else{ return <Image source={require('../../../assets/welcome.png')}resizeMode={'cover'}/> }
 
     }
 
@@ -100,6 +103,8 @@ export default function  LandingScreen(){
                         placeholder="Login de usuário"
                         placeholderTextColor="white"
                         onChangeText={(text)=>{setInput(text)}}
+                        blurOnSubmit={true}
+                        onSubmitEditing={()=> SearchPerfil()}
                     />
                     <TouchableOpacity
                         onPress={()=>{SearchPerfil()}}
@@ -169,5 +174,5 @@ const styles = StyleSheet.create({
     },
     viewList:{
         width:'100%',
-    }
+    },
 })
