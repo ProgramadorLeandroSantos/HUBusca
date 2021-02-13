@@ -1,28 +1,29 @@
 import React from 'react';
-import {View, Text, TouchableOpacity, StyleSheet, Image} from 'react-native';
+import {View, Text, TouchableOpacity, StyleSheet, Image, Alert} from 'react-native';
 
 
 interface IPerfilCard{
     name: string,
     login: string,
-    image: object,
-    location: string
+    image: string,
+    location: string,
 }
 
 
 export default function PerfilCard(props: IPerfilCard): JSX.Element{
+    let {name,login,image,location} = props;
 
     return(
         <TouchableOpacity style={styles.cardContainer}>
             <View style={styles.viewPhotoContainer}>
-                <Image source={require('../../../assets/homem.png')} style={styles.viewPhoto}/>
+                <Image source={{ uri:image }} style={styles.viewPhoto}/>
             </View>
             <View style={styles.viewDetails}>
-                <Text style={styles.name}>{props.name}</Text>
-                <Text style={styles.login}>{props.login}</Text>
+                <Text style={styles.name}>{name}</Text>
+                <Text style={styles.login}>{login}</Text>
                 <View style={styles.locationContainer}>
-                    <Image source={props.image}/>
-                    <Text style={styles.location}>{props.location}</Text>
+                    <Image source={require('../../../assets/locationIcon.png')} />
+                    <Text style={styles.location}>{location}</Text>
                 </View>
 
             </View>
@@ -40,6 +41,7 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.2,
         elevation: 5,
         marginHorizontal:10,
+        marginBottom:10,
         justifyContent:'space-around',
         alignItems:'center',
         flexDirection:'row'
@@ -61,7 +63,7 @@ const styles = StyleSheet.create({
     },
     viewDetails:{
         height: '80%',
-        width: '60%',
+        width: '75%',
         justifyContent:'center',
     },
     name:{
@@ -80,11 +82,12 @@ const styles = StyleSheet.create({
         fontSize:16,
         fontWeight: '100',
         color:'gray',
+        marginLeft:5,
     },
     locationContainer:{
         alignItems:'center',
         flexDirection:'row',
         marginTop:5,
-        marginLeft:20
+        marginLeft:20,
     },
 })

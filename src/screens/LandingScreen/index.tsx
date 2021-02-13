@@ -7,15 +7,17 @@ import {
     TouchableOpacity, 
     ActivityIndicator,
     Alert,
-    ScrollView
+    ScrollView,
+    SafeAreaView
 } from 'react-native';
 
 import PerfilCard from '../../components/PerfilCard';
 import ClearButton from '../../components/ClearHistorySearch';
-import api from '../../services/api';
+import api from '../../services/api/api';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function  LandingScreen(){
-    const [lastsSearch,setLastsSearch]:any = useState([0]);
+    const [lastsSearch,setLastsSearch]:any = useState([]);
     const [input,setInput] = useState("");
     const [isLoading,setIsLoading] = useState(false);
 
@@ -24,14 +26,27 @@ export default function  LandingScreen(){
     }
 
     const Data = ()=>{
-        if(isLoading){ return <ActivityIndicator size="large" color="#FF7A00" /> }
+    
+        if(isLoading){ 
+            return <ActivityIndicator size="large" color="#FF7A00" /> 
+        }
         
         if(lastsSearch.length !== 0){
             return(
-                
                 <ScrollView style={styles.viewList}>
                     <ClearButton clear = { ClearHistory }/>
-                    <PerfilCard name="Homem Aranha" login="DevzãoBoladão" image={require('../../../assets/locationIcon.png')} location="Telhado velho"/>  
+                      
+                    { lastsSearch.map((perfil:any) =>{ 
+                    return(
+                        <PerfilCard 
+                            key={perfil.id} 
+                            name={perfil.name} 
+                            login={perfil.login} 
+                            image={perfil.image} 
+                            location={perfil.location}
+                        />  
+                    )
+                } )} 
                 </ScrollView>
             )
         }
@@ -45,24 +60,35 @@ export default function  LandingScreen(){
             try {
                 const response = await api.get(`/${input}`);
                 if(response){
+
+                    let perfil: any = {
+                        id:  response.data.id,
+                        name: response.data.name,
+                        login: response.data.login,
+                        image: response.data.avatar_url,
+                        reposURL: response.data.repos_url,
+                        location: response.data.location,
+                        quantRepos: response.data.public_repos,
+                        followers: response.data.followers,
+                    } 
+                    setLastsSearch([perfil, ...lastsSearch]);
                     setIsLoading(false);
-                    Alert.alert("Encontrei esse Perfil",`Nome:  ${response.data.name}`)
                 }
             }
             catch (error) {
                 Alert.alert("Nenhum perfil encontrado",`Não existe um perfil com o nome ${input}`);
-                setIsLoading(false);
             }
         }
         else{
             Alert.alert("Desculpe :(","Digite um nome antes de pesquisar algum perfil...");
-            setIsLoading(false);
+            
         }
+        setIsLoading(false);
     }
 
     useEffect(()=>{
         Data();
-    },[lastsSearch])
+    },[])
 
     return(
         <View style={styles.container}>
@@ -82,9 +108,9 @@ export default function  LandingScreen(){
                     </TouchableOpacity>
                 </View>
             </View>
-            <View style={styles.mainView}>
+            <SafeAreaView style={styles.mainView}>
                 <Data/>
-            </View>
+            </SafeAreaView>
 
         </View>
     )
