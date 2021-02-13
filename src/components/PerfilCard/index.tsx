@@ -94,13 +94,13 @@ const styles = StyleSheet.create({
         marginLeft:20
     },
     login:{
-        fontSize:16,
+        fontSize:13,
         fontWeight: '100',
         color:'gray',
         marginLeft:20
     },
     location:{
-        fontSize:16,
+        fontSize:13,
         fontWeight: '100',
         color:'gray',
         marginLeft:5,

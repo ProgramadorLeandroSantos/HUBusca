@@ -22,6 +22,7 @@ export default function  LandingScreen(){
 
     const ClearHistory = ()=>{
         setLastsSearch([]);
+        setInput("");
     }
 
     const Data = ()=>{
@@ -105,6 +106,7 @@ export default function  LandingScreen(){
                         onChangeText={(text)=>{setInput(text)}}
                         blurOnSubmit={true}
                         onSubmitEditing={()=> SearchPerfil()}
+                        value={input}
                     />
                     <TouchableOpacity
                         onPress={()=>{SearchPerfil()}}
