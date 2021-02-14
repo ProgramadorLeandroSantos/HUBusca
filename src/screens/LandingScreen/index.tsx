@@ -1,30 +1,41 @@
 import React,{useState, useEffect} from  'react';
-import {
-    View,
-    TextInput, 
-    StyleSheet, 
-    Image, 
-    TouchableOpacity, 
-    ActivityIndicator,
-    Alert,
-    ScrollView,
-    SafeAreaView
-} from 'react-native';
+import {View,TextInput,StyleSheet,Image,TouchableOpacity, ActivityIndicator,Alert,ScrollView,SafeAreaView} from 'react-native';
 
 import PerfilCard from '../../components/PerfilCard';
 import ClearButton from '../../components/ClearHistorySearch';
 import api from '../../services/api/api';
+import SQLite from '../../services/database/Connection';
 
 export default function  LandingScreen(){
     const [lastsSearch,setLastsSearch]:any = useState([]);
     const [input,setInput] = useState("");
     const [isLoading,setIsLoading] = useState(false);
 
+    //creating table on Database SQLITE
+    useEffect(() => {
+        SQLite.transaction(tx => {
+          tx.executeSql(
+            'create table if not exists perfils (id integer primary key not null, name text, login text, image text, location text, reposURL text, quantRepos text, followers text);'
+          );
+        });
+    }, [isLoading]);
+
+    const DeletePerfilsList = ()=>{
+
+        SQLite.transaction(
+            tx => {
+              tx.executeSql(`DROP TABLE perfils;`);
+            },            
+          )
+    }
+
     const ClearHistory = ()=>{
+        DeletePerfilsList();
         setLastsSearch([]);
         setInput("");
     }
 
+    //render conditional
     const Data = ()=>{
     
         if(isLoading){ 
@@ -54,14 +65,15 @@ export default function  LandingScreen(){
                 </ScrollView>
             )
         }
-        else{ return <Image source={require('../../../assets/welcome.png')}resizeMode={'cover'}/> }
+        else {return <Image source={require('../../../assets/welcome.png')}resizeMode={'cover'}/>}
 
     }
 
-    async function SearchPerfil(){
-        setIsLoading(true);
-    
+    // 
+    const SearchPerfil = async()=>{
+
         if(input!== ""){
+            setIsLoading(true);
             try {
                 const response = await api.get(`/${input}`);
                 if(response){
@@ -76,8 +88,19 @@ export default function  LandingScreen(){
                         quantRepos: response.data.public_repos,
                         followers: response.data.followers,
                     } 
-                    setLastsSearch([perfil, ...lastsSearch]);
-                    setIsLoading(false);
+            
+                    SQLite.transaction(
+                        tx => {
+                          tx.executeSql('INSERT INTO perfils (id, name, login, image, location, reposURL, quantRepos, followers ) values (?,?,?,?,?,?,?,?)',
+                          [perfil.id, perfil.name, perfil.login, perfil.image, perfil.location, perfil.reposURL, perfil.quantRepos, perfil.followers ]);
+                            tx.executeSql('SELECT * FROM perfils', [], (_,  { rows: { _array } }) =>{
+                                setLastsSearch(_array)
+                                setIsLoading(false);
+                                setInput("");
+                            }
+                          );
+                        }
+                      );
                 }
             }
             catch (error) {
@@ -85,16 +108,32 @@ export default function  LandingScreen(){
             }
         }
         else{
-            Alert.alert("Desculpe :(","Digite um login de usuário antes de pesquisar algum perfil...");
-            
+            Alert.alert("Desculpe :(","Digite um login de usuário antes de pesquisar algum perfil...");   
         }
-        setIsLoading(false);
-        setInput("");
     }
 
     useEffect(()=>{
         Data();
     },[])
+
+    useEffect(() => {
+        setIsLoading(true);
+        SQLite.transaction(tx => {
+          tx.executeSql(
+            `SELECT * FROM perfils;`,
+            [],
+            (_, { rows: { _array } }) =>{
+               if(_array){
+                    setLastsSearch(_array)
+                    setIsLoading(false);
+               }
+               else{
+                    setIsLoading(false);
+               }
+            }
+          );
+        });
+      }, []);
 
     return(
         <View style={styles.container}>

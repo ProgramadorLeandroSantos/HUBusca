@@ -6,6 +6,8 @@ import ReposCard from '../../components/ReposCard';
 
 export default function PerfilScreen({route}:any){
     const { name,login,image,location,reposURL,quantRepos,followers,id } = route.params;
+    const followersFormated = Number(followers).toFixed();
+    const quantReposFormated = Number(quantRepos).toFixed();
     const [reposList,setReposList]:any = useState([]);
     const [isLoading,setIsLoading] = useState(false);
 
@@ -75,11 +77,11 @@ export default function PerfilScreen({route}:any){
                 </View>
                 <View style={styles.subHeaderTwo}>
                     <View style={styles.followers}>
-                        <Text style={styles.subHeaderTwoTexth1}>{followers}</Text>
+                        <Text style={styles.subHeaderTwoTexth1}>{followersFormated}</Text>
                         <Text style={styles.subHeaderTwoText}>Seguidores</Text>
                     </View>
                     <View style={styles.reposQuant}>
-                        <Text style={styles.subHeaderTwoTexth1}>{quantRepos}</Text>
+                        <Text style={styles.subHeaderTwoTexth1}>{quantReposFormated}</Text>
                         <Text style={styles.subHeaderTwoText}>Repositórios</Text>
                     </View>
                     <View style={styles.id}>
