@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, Text, TouchableOpacity, StyleSheet,Image} from 'react-native';
+import {View, Text, TouchableOpacity, StyleSheet,Image, Alert,Linking} from 'react-native';
 
 interface IReposCard{
     name: string,
@@ -13,10 +13,25 @@ interface IReposCard{
 
 export default function PerfilCard(props:IReposCard):JSX.Element{
     const {name,description,publishedAt,createdAt,language,stars,link} = props;
+    let linkFormated = link.substr(6);
+    let publishedAtFormated = publishedAt.substring(0,10); 
+    let createdAtFormated = createdAt.substring(0,10); 
+    
+    async function openOnbrowser(){
+        try {
+            await Linking.openURL(`https://${linkFormated}`)
+        } catch (error) {
+            Alert.alert("Desculpe","Nao foi possível acessar esse repositório")
+        }
+    };
+
     return(
-        <TouchableOpacity style={styles.cardContainer}>
+        <TouchableOpacity 
+            style={styles.cardContainer}
+            onPress={() =>{ openOnbrowser() }}
+        >
            <View style={styles.viewName}>
-                <Text style={styles.repoName}>{name}</Text>
+                <Text style={styles.repoName} numberOfLines={1}>{name}</Text>
            </View>
 
            <View style={styles.viewDescription}>
@@ -27,8 +42,8 @@ export default function PerfilCard(props:IReposCard):JSX.Element{
            </View>
            
            <View style={styles.viewDates}>
-                <Text style={styles.reposDates}>Último push: {publishedAt}</Text>
-                <Text style={styles.reposDates}>Criado em: {createdAt}</Text>
+                <Text style={styles.reposDates}>Último push: {publishedAtFormated}</Text>
+                <Text style={styles.reposDates}>Criado em: {createdAtFormated}</Text>
            </View>
 
            <View style={styles.viewLanguageAndStars}>
@@ -57,10 +72,10 @@ const styles = StyleSheet.create({
         flexDirection:'column'
     },
     viewName:{
-        width:'100%',
+        width:'95%',
         height:'25%',
-        justifyContent:'center',
-        alignItems:'center'
+        justifyContent:'flex-end',
+        alignItems:'center',
     },
     viewDescription:{
         height:'40%',
@@ -82,9 +97,9 @@ const styles = StyleSheet.create({
         alignItems:'center',
     },
     repoName:{
-        fontSize:25,
+        fontSize:18,
         borderColor:'#FF7A00',
-        borderBottomWidth:3,
+        borderBottomWidth:1.5,
         fontWeight:'bold',
     },
     repoDescription:{

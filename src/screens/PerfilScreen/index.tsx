@@ -66,7 +66,7 @@ export default function PerfilScreen({route}:any){
                    
                     <View style={styles.viewDetails}>
                         <Text style={styles.name}>{name}</Text>
-                        <Text style={styles.login}>{login}</Text>
+                        <Text style={styles.login}>@{login}</Text>
                         <View style={styles.locationContainer}>
                             <Image source={require('../../../assets/locationIcon.png')} />
                             <Text style={styles.location}>{location}</Text>
@@ -103,6 +103,7 @@ const styles = StyleSheet.create({
    
     header:{
         marginTop:23,
+        marginBottom:3,
         backgroundColor:'#FFFF',
         height:180,
         justifyContent:'flex-end',

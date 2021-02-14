@@ -60,6 +60,7 @@ export default function  LandingScreen(){
 
     async function SearchPerfil(){
         setIsLoading(true);
+    
         if(input!== ""){
             try {
                 const response = await api.get(`/${input}`);
@@ -80,14 +81,15 @@ export default function  LandingScreen(){
                 }
             }
             catch (error) {
-                Alert.alert("Nenhum perfil encontrado",`Não existe um perfil com o nome ${input}`);
+                Alert.alert("Nenhum perfil encontrado",`Não existe um perfil com o Login de usuário ${input}`);
             }
         }
         else{
-            Alert.alert("Desculpe :(","Digite um nome antes de pesquisar algum perfil...");
+            Alert.alert("Desculpe :(","Digite um login de usuário antes de pesquisar algum perfil...");
             
         }
         setIsLoading(false);
+        setInput("");
     }
 
     useEffect(()=>{

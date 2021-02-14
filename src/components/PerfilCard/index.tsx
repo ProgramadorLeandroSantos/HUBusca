@@ -40,8 +40,8 @@ export default function PerfilCard(props: IPerfilCard): JSX.Element{
                 <Image source={{ uri:image }} style={styles.viewPhoto}/>
             </View>
             <View style={styles.viewDetails}>
-                <Text style={styles.name}>{name}</Text>
-                <Text style={styles.login}>{login}</Text>
+                <Text style={styles.name} numberOfLines={1}>{name}</Text>
+                <Text style={styles.login} numberOfLines={1}>@{login}</Text>
                 <View style={styles.locationContainer}>
                     <Image source={require('../../../assets/locationIcon.png')} />
                     <Text style={styles.location}>{location}</Text>
