@@ -11,5 +11,5 @@
 4 - ja no terminal com o diretório do projeto, Execute `yarn start` para abrir o servidor no navegador. <br/>
 5 - Escolha a melhor forma de iniciar a aplicação.
 
-###### Tecnologia utilizada : React Native, SQLite, Typescript e Expo.
+###### Tecnologias utilizadas : React Native, SQLite, Typescript e Expo.
 ##### Objetivo: segunda fase do processo seletivo na Clicksoft.
