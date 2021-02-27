@@ -12,4 +12,3 @@
 5 - Escolha a melhor forma de iniciar a aplicação.
 
 ###### Tecnologias utilizadas : React Native, SQLite, Typescript e Expo.
-##### Objetivo: segunda fase do processo seletivo na Clicksoft.
