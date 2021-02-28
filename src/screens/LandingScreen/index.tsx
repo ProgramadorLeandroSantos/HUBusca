@@ -105,6 +105,7 @@ export default function  LandingScreen(){
             }
             catch (error) {
                 Alert.alert("Nenhum perfil encontrado",`Não existe um perfil com o Login de usuário ${input}`);
+                setIsLoading(false);
             }
         }
         else{
