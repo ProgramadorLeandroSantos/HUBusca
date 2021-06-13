@@ -1,5 +1,6 @@
 import React from 'react';
-import {View, Text, TouchableOpacity, StyleSheet,Image, Alert,Linking} from 'react-native';
+import {View, Text, TouchableOpacity, StyleSheet,Image, Alert, Linking} from 'react-native';
+import {format} from 'date-fns';
 
 interface IReposCard{
     name: string,
@@ -14,8 +15,6 @@ interface IReposCard{
 export default function PerfilCard(props:IReposCard):JSX.Element{
     const {name,description,publishedAt,createdAt,language,stars,link} = props;
     let linkFormated = link.substr(6);
-    let publishedAtFormated = publishedAt.substring(0,10); 
-    let createdAtFormated = createdAt.substring(0,10); 
     
     async function openOnbrowser(){
         try {
@@ -42,8 +41,8 @@ export default function PerfilCard(props:IReposCard):JSX.Element{
            </View>
            
            <View style={styles.viewDates}>
-                <Text style={styles.reposDates}>Último push: {publishedAtFormated}</Text>
-                <Text style={styles.reposDates}>Criado em: {createdAtFormated}</Text>
+                <Text style={styles.reposDates}>Último push: {format(new Date(publishedAt),'dd/MM/yyyy')}</Text>
+                <Text style={styles.reposDates}>Criado em: {format(new Date(createdAt),'dd/MM/yyyy')}</Text>
            </View>
 
            <View style={styles.viewLanguageAndStars}>
@@ -107,7 +106,8 @@ const styles = StyleSheet.create({
         fontStyle:'italic',
     },
     reposDates:{
-        fontSize:10,
+        fontSize:13,
+        fontWeight: 'bold',
     },
     viewStars:{
         flexDirection:'row',

@@ -14,7 +14,7 @@ export default function ClearButton(props: IClearButton){
             onPress={props.clear}
         >
             <Image source={require('../../../assets/trashicon.png')}/>
-           <Text  style={styles.text}>Limpar histórico</Text>
+           <Text  style={styles.text}>Limpar histórico de pesquisa</Text>
         </TouchableOpacity>
     )
 }
@@ -23,6 +23,7 @@ const styles = StyleSheet.create({
     Button:{
         height: 30,
         marginTop:10,
+        marginBottom:10,
         flexDirection:"row",
         justifyContent: "center",
         alignItems:'center',
@@ -31,5 +32,6 @@ const styles = StyleSheet.create({
         color:'black',
         textAlign:'center',
         fontSize: 16,
+        marginLeft: 5,
     }
 })
